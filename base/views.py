@@ -1,3 +1,4 @@
+from django.http import FileResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -22,3 +23,14 @@ class CountryRefreshView(APIView):
             'status': 'success',
             'message': 'Countries refreshed successfully.'
         }, status=status.HTTP_200_OK)
+
+
+class SummaryImageView(APIView):
+    def get(self, request):
+        from django.conf import settings
+        file_path = settings.BASE_DIR / 'cache/summary.png'
+        if not file_path.exists():
+            return Response({
+                'error': 'Summary image not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        return FileResponse(open(file_path, 'rb'), content_type='image/png')
