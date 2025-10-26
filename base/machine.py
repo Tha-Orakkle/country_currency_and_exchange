@@ -95,5 +95,5 @@ class RefreshCountryMachine:
         
         self.create_or_update_countries(countries, exchange_rates)
         self.update_countries_meta()
-        create_summary_image.delay()
+        create_summary_image()
         
