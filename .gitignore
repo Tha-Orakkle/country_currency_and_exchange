@@ -3,3 +3,4 @@ __pycache__/
 db.sqlite3
 test.rest
 cache/
+.env
