@@ -4,7 +4,8 @@ from base.views import (
     CountryRefreshView,
     CountryListView,
     CountryRetrieveDestroyView,
-    SummaryImageView
+    SummaryImageView,
+    StatusView
 )
 
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
     path('countries/image', SummaryImageView.as_view(), name='countries-image'),
     path('countries', CountryListView.as_view(), name='countries'),
     path('countries/<str:name>', CountryRetrieveDestroyView.as_view(), name='country-retrieve-destroy'),
+    path('status', StatusView.as_view(), name='countries-status')    
 ]

@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from .exceptions import ExternalAPIUnavailable
 from .filters import CountryFilter, CountrySortFilter
 from .machine import RefreshCountryMachine
-from .models import Country
+from .models import Country, CountryMeta
 from .serializers import CountrySerializer
 
 
@@ -61,3 +61,12 @@ class CountryRetrieveDestroyView(generics.RetrieveDestroyAPIView):
         except Country.DoesNotExist:
             raise NotFound({'error': 'Country not found'})
     
+    
+class StatusView(APIView):
+    def get(self, request):
+        c_meta = CountryMeta.objects.first()
+
+        return Response({
+            'total_countries': c_meta.total_countries if c_meta else 0,
+            'last_refreshed_at': c_meta.last_refreshed_at if c_meta else None
+        })
