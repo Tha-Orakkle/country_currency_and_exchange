@@ -1,6 +1,7 @@
 from django.http import FileResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
+from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -46,3 +47,17 @@ class CountryListView(generics.ListAPIView):
     serializer_class = CountrySerializer
     filter_backends = [DjangoFilterBackend, CountrySortFilter]
     filterset_class = CountryFilter
+
+
+class CountryRetrieveDestroyView(generics.RetrieveDestroyAPIView):
+    lookup_field = 'name'
+    serializer_class = CountrySerializer
+    queryset = Country.objects.all()
+    
+    def get_object(self):
+        name = self.kwargs.get(self.lookup_field)
+        try:
+            return self.queryset.get(name__iexact=name)
+        except Country.DoesNotExist:
+            raise NotFound({'error': 'Country not found'})
+    
