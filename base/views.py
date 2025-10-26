@@ -1,10 +1,15 @@
 from django.http import FileResponse
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .exceptions import ExternalAPIUnavailable
+from .filters import CountryFilter, CountrySortFilter
 from .machine import RefreshCountryMachine
+from .models import Country
+from .serializers import CountrySerializer
+
 
 class CountryRefreshView(APIView):
 
@@ -34,3 +39,10 @@ class SummaryImageView(APIView):
                 'error': 'Summary image not found'
             }, status=status.HTTP_404_NOT_FOUND)
         return FileResponse(open(file_path, 'rb'), content_type='image/png')
+
+
+class CountryListView(generics.ListAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    filter_backends = [DjangoFilterBackend, CountrySortFilter]
+    filterset_class = CountryFilter
