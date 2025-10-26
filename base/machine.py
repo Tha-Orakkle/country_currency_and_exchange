@@ -2,9 +2,9 @@ from django.utils.timezone import now
 import requests
 from requests.exceptions import RequestException
 
-
 from .exceptions import ExternalAPIUnavailable
 from .models import Country, CountryMeta
+from .tasks import create_summary_image
 
 class RefreshCountryMachine:
     RC_URL = "https://restcountries.com/v2/all?fields=name,capital,region,population,flag,currencies"
@@ -95,4 +95,5 @@ class RefreshCountryMachine:
         
         self.create_or_update_countries(countries, exchange_rates)
         self.update_countries_meta()
+        create_summary_image.delay()
         
