@@ -35,6 +35,15 @@ DEBUG=True
 ```bash
 python manage.py runserver
 ```
+* Start celery worker
+
+run these in separate terminals
+```bash
+redis-sever #termial 1
+```
+```bash
+celery -A core worker --loglevel=info #termial 2
+```
 
 ## Endpoints
 * **POST** `/countries/refresh` - Hits both APIs to refresh the countries in the db and calculate teh estimated GDP of each country.
